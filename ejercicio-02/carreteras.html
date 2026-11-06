@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Ejercicio 02 de la UF03: diseño de la base de datos CARRETERAS con DDL de MySQL.">
+    <meta name="theme-color" content="#0f172a">
+    <title>Ejercicio 02 · Base de datos CARRETERAS | UF03 MySQL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+    <header class="bg-slate-900 text-white">
+      <div class="mx-auto max-w-6xl px-5 py-5 sm:px-8">
+        <nav class="flex flex-wrap items-center justify-between gap-4" aria-label="Navegación principal">
+          <span class="text-sm font-semibold tracking-wide text-slate-200">UF03 · DDL</span>
+        </nav>
+        <div class="py-12 sm:py-16">
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">Ejercicio 02</p>
+          <h1 class="text-3xl font-bold tracking-tight sm:text-5xl">Base de datos <span class="text-cyan-300">CARRETERAS</span></h1>
+          <p class="mt-5 max-w-2xl text-base leading-7 text-slate-300">Diseño y creación de la estructura de carreteras utilizando el Lenguaje de Definición de Datos de MySQL.</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-14">
+      <nav class="mb-8 text-sm text-slate-500" aria-label="Ruta de navegación">
+        <ol class="flex flex-wrap items-center gap-2">
+          <li class="text-slate-500">UF03 · DDL</li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page" class="text-slate-700">Ejercicio 02 · CARRETERAS</li>
+        </ol>
+      </nav>
+
+      <div class="grid gap-8">
+        <div class="space-y-8">
+          <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8" aria-labelledby="objective-heading">
+            <h2 id="objective-heading" class="text-xl font-bold text-slate-900">Objetivo del ejercicio</h2>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Definir las tablas de la base de datos CARRETERAS y sus relaciones de acuerdo con el SQL original del ejercicio.</p>
+          </section>
+
+          <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8" aria-labelledby="tables-heading">
+            <details class="group">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-3 text-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2 [&::-webkit-details-marker]:hidden">
+                <span id="tables-heading">Tablas del ejercicio</span>
+                <span class="text-base transition-transform group-open:rotate-180" aria-hidden="true">⌄</span>
+              </summary>
+              <div class="mt-2">
+                <p class="text-sm leading-6 text-slate-600">La estructura, las claves y los campos que se describen a continuación corresponden al archivo original <code class="rounded bg-slate-100 px-1 py-0.5">carreteras-1.sql</code>.</p>
+                <div class="mt-5 grid gap-4 sm:grid-cols-2">
+<article class="rounded-xl bg-slate-50 p-4"><h3 class="font-mono text-sm font-bold text-slate-900">categorias</h3><p class="mt-2 text-sm leading-6 text-slate-600">Clasificación de carreteras. PK: <code>id_categoria</code>. Nombre y descripción obligatorios.</p></article>
+<article class="rounded-xl bg-slate-50 p-4"><h3 class="font-mono text-sm font-bold text-slate-900">carreteras</h3><p class="mt-2 text-sm leading-6 text-slate-600">PK: <code>codigo</code>. Incluye nombre, prefijo, color, señal, observaciones, titularidad, nivel, tipo de vía, acceso controlado y doble calzada. FK obligatoria <code>id_categoria</code>. El nivel admite 1, 2, 3 o NULL.</p></article>
+<article class="rounded-xl bg-slate-50 p-4"><h3 class="font-mono text-sm font-bold text-slate-900">comunidades_autonomas</h3><p class="mt-2 text-sm leading-6 text-slate-600">PK autoincremental: <code>id_comunidad</code>. Nombre obligatorio.</p></article>
+<article class="rounded-xl bg-slate-50 p-4"><h3 class="font-mono text-sm font-bold text-slate-900">provincias</h3><p class="mt-2 text-sm leading-6 text-slate-600">PK autoincremental: <code>id_provincia</code>. Nombre y FK <code>id_comunidad</code> obligatorios.</p></article>
+<article class="rounded-xl bg-slate-50 p-4"><h3 class="font-mono text-sm font-bold text-slate-900">tramos</h3><p class="mt-2 text-sm leading-6 text-slate-600">PK autoincremental: <code>id_tramo</code>. Referencia una carretera y las provincias de inicio y fin. Registra kilómetros inicial y final, terreno, entorno, velocidad límite y carriles por sentido. El SQL no define una columna de longitud calculada.</p></article>
+<article class="rounded-xl bg-slate-50 p-4"><h3 class="font-mono text-sm font-bold text-slate-900">extremos_carretera</h3><p class="mt-2 text-sm leading-6 text-slate-600">PK autoincremental: <code>id_extremo</code>. Registra posición (Inicio o Final), tipo (Fisico o Confluencia), kilómetro, carretera, tramo y provincia. Datos de confluencia opcionales. <code>UNIQUE (codigo_carretera, posicion)</code> permite como máximo un extremo de cada posición por carretera.</p></article>
+<article class="rounded-xl bg-slate-50 p-4"><h3 class="font-mono text-sm font-bold text-slate-900">trayectos</h3><p class="mt-2 text-sm leading-6 text-slate-600">Pasos de un tramo por provincias e intervalos kilométricos. PK compuesta: <code>(id_tramo, id_paso)</code>. FK a <code>tramos</code> y <code>provincias</code>.</p></article>
+                </div>
+              </div>
+            </details>
+          </section>
+
+          <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8" aria-labelledby="keys-heading">
+            <details class="group">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-3 text-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2 [&::-webkit-details-marker]:hidden">
+                <span id="keys-heading">Claves y relaciones</span>
+                <span class="text-base transition-transform group-open:rotate-180" aria-hidden="true">⌄</span>
+              </summary>
+              <div class="mt-5">
+                <dl class="space-y-4 text-sm leading-6">
+                  <div>
+                    <dt class="font-semibold text-slate-800">Clave primaria (PK)</dt>
+                    <dd class="text-slate-600">Identifica de forma única cada fila de una tabla.</dd>
+                  </div>
+                  <div>
+                    <dt class="font-semibold text-slate-800">Clave foránea (FK)</dt>
+                    <dd class="text-slate-600">Referencia una clave de otra tabla para relacionar registros.</dd>
+                  </div>
+                  <div>
+                    <dt class="font-semibold text-slate-800">Clave primaria compuesta</dt>
+                    <dd class="text-slate-600">En <code>trayectos</code>, la combinación <code>(id_tramo, id_paso)</code> identifica cada paso de un tramo por una provincia.</dd>
+                  </div>
+                </dl>
+                <h3 class="mt-6 font-semibold text-slate-900">Relaciones definidas por las FK</h3>
+                <ul class="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-600"><li>Cada carretera referencia una categoría mediante <code>carreteras.id_categoria</code>.</li>
+<li>Cada provincia pertenece a una comunidad autónoma mediante <code>provincias.id_comunidad</code>.</li>
+<li>Cada tramo referencia una carretera y sus provincias de inicio y fin mediante <code>codigo_carretera</code>, <code>id_provincia_inicio</code> e <code>id_provincia_fin</code>.</li>
+<li>Cada extremo referencia una carretera, una provincia y un tramo de esa misma carretera mediante la FK compuesta <code>(codigo_carretera, id_tramo)</code>. Las FK opcionales de confluencia referencian un tramo y una provincia.</li>
+<li>Los trayectos relacionan tramos y provincias mediante <code>id_tramo</code> e <code>id_provincia</code>, registrando los kilómetros recorridos por cada provincia.</li></ul>
+              </div>
+            </details>
+          </section>
+
+          <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8" aria-labelledby="sql-heading">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 id="sql-heading" class="text-xl font-bold text-slate-900">Código SQL</h2>
+                <p class="mt-1 text-sm text-slate-600">Contenido literal del archivo original <code class="rounded bg-slate-100 px-1 py-0.5">carreteras-1.sql</code>.</p>
+              </div>
+              <div class="flex flex-wrap gap-3">
+                <button id="copy-sql" class="rounded-lg bg-cyan-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-cyan-950 focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2" type="button" aria-describedby="sql-status">Copiar SQL</button>
+                <button id="download-sql" class="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50" type="button">Descargar SQL <span aria-hidden="true">↓</span></button>
+              </div>
+            </div>
+            <details class="group mt-5">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-3 rounded-lg border border-slate-200 px-4 py-3 text-sm font-semibold text-cyan-900 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-600 [&::-webkit-details-marker]:hidden">
+                <span>Mostrar código SQL</span>
+                <span class="transition-transform group-open:rotate-180" aria-hidden="true">⌄</span>
+              </summary>
+              <pre class="mt-3 overflow-x-auto rounded-xl bg-slate-950 p-5 text-sm leading-6 text-slate-200" aria-label="Código SQL de la base de datos CARRETERAS"><code id="sql-display"></code></pre>
+            </details>
+            <p id="sql-status" class="mt-3 min-h-5 text-xs text-slate-500" role="status" aria-live="polite">SQL original listo para copiar o descargar.</p>
+          </section>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="border-t border-slate-200 bg-white">
+      <div class="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+        <a class="hover:text-slate-800" href="../">UF03 · Lenguaje de Definición de Datos</a>
+        <p>Ejercicio 02 · Base de datos CARRETERAS</p>
+      </div>
+    </footer>
+    <script type="text/plain" id="sql-source">-- EJERCICIO 3: CARRETERAS
+-- Creación de la base de datos
+
+CREATE DATABASE IF NOT EXISTS carreteras;
+USE carreteras;
+
+USE carreteras;
+
+/*
+EJERCICIO 3: CARRETERAS
+
+OBJETIVO:
+Diseñar una base de datos para gestionar
+las carreteras del país y sus características.
+
+CARRETERAS:
+- Código, nombre, titularidad y nivel.
+- Tipo de vía: autopista, autovía,
+  multicarril o convencional.
+- Acceso controlado y doble calzada (booleanos).
+- Prefijo, color, señal y observaciones.
+- Clasificación por categorías.
+
+TITULARIDAD Y NIVELES:
+- Estatal: sin nivel.
+- Nivel 1: autonómica (naranja).
+- Nivel 2: autonómica o provincial (verde).
+- Nivel 3: autonómica, provincial o municipal
+  (amarillo).
+
+TRAMOS:
+- Identificador autogenerado.
+- Carretera a la que pertenecen.
+- Kilómetro inicial y final.
+- Longitud calculada.
+- Tipo de terreno: plano, cuesta subida
+  o cuesta bajada.
+- Entorno: urbano, travesía o extraurbano.
+- Velocidad límite y carriles por sentido.
+- Observaciones adicionales.
+
+LOCALIZACIÓN GEOGRÁFICA:
+- Comunidades autónomas y provincias.
+- Provincia de inicio y final de cada tramo.
+- Un tramo puede atravesar varias provincias.
+- Registro de los intervalos kilométricos
+  recorridos por cada provincia.
+
+EXTREMOS DE CARRETERA:
+- Identificación del inicio y final.
+- Finalización física o confluencia.
+- Si existe confluencia, registrar la carretera,
+  el kilómetro, tramo y provincia correspondiente.
+
+RESTRICCIONES:
+- Cada tramo pertenece a una única carretera.
+- Una carretera puede tener varios tramos.
+- Cada carretera tiene un inicio y un final.
+- La longitud se calcula a partir de los kilómetros.
+*/
+
+CREATE DATABASE IF NOT EXISTS carreteras;
+USE carreteras;
+
+-- Table CATEGORIAS
+CREATE TABLE categorias (
+    id_categoria VARCHAR(15) PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(100) NOT NULL
+);
+
+-- Table CARRETERAS
+CREATE TABLE carreteras (
+codigo VARCHAR(15) PRIMARY KEY,
+nombre VARCHAR(50) NOT NULL,
+prefijo VARCHAR(50) NOT NULL,
+color VARCHAR(20), 
+senyal VARCHAR(100),
+observaciones VARCHAR (100),
+titularidad VARCHAR (50),
+nivel TINYINT CHECK (nivel IN (1, 2, 3)),
+tipo_via VARCHAR (20),
+acceso_controlado BOOLEAN,
+doble_calzada BOOLEAN NOT NULL,
+id_categoria VARCHAR(15) NOT NULL,
+FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
+);
+
+USE carreteras;
+
+-- Table Comunidad Autonoma
+CREATE TABLE comunidades_autonomas (
+    id_comunidad INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL
+);
+
+-- Tabla PROVINCIAS
+CREATE TABLE provincias (
+    id_provincia INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    id_comunidad INT NOT NULL,
+    FOREIGN KEY (id_comunidad)
+        REFERENCES comunidades_autonomas(id_comunidad)
+);
+
+-- Tabla TRAMOS
+CREATE TABLE tramos (
+    id_tramo INT AUTO_INCREMENT PRIMARY KEY,
+    codigo_carretera VARCHAR(15) NOT NULL,
+    km_inicial DECIMAL(8,3) NOT NULL,
+    km_final DECIMAL(8,3) NOT NULL,
+    tipo_terreno ENUM('Plano', 'Cuesta subida', 'Cuesta bajada') NOT NULL,
+    entorno ENUM('Urbano', 'Travesía', 'Extraurbano') NOT NULL,
+    velocidad_limite INT NOT NULL,
+    numero_carriles_por_sentido TINYINT UNSIGNED NOT NULL,
+    observaciones VARCHAR(200),
+    id_provincia_inicio INT NOT NULL,
+    id_provincia_fin INT NOT NULL,
+
+    FOREIGN KEY (codigo_carretera)
+        REFERENCES carreteras(codigo),
+
+    FOREIGN KEY (id_provincia_inicio)
+        REFERENCES provincias(id_provincia),
+
+    FOREIGN KEY (id_provincia_fin)
+        REFERENCES provincias(id_provincia),
+
+    UNIQUE (codigo_carretera, id_tramo)
+);
+
+USE carreteras;
+
+-- Tabla EXTREMOS_CARRETERA
+CREATE TABLE extremos_carretera (
+    id_extremo INT AUTO_INCREMENT PRIMARY KEY,
+    posicion ENUM('Inicio', 'Final') NOT NULL,
+    tipo_extremo ENUM('Fisico', 'Confluencia') NOT NULL,
+    km_extremo DECIMAL(8,3) NOT NULL,
+    codigo_carretera VARCHAR(15) NOT NULL,
+    id_tramo INT NOT NULL,
+    id_provincia INT NOT NULL,
+    km_confluencia DECIMAL(8,3),
+    id_tramo_confluencia INT,
+    id_provincia_confluencia INT,
+
+FOREIGN KEY (codigo_carretera)
+    REFERENCES carreteras(codigo),
+
+FOREIGN KEY (codigo_carretera, id_tramo)
+    REFERENCES tramos(codigo_carretera, id_tramo),
+
+FOREIGN KEY (id_provincia)
+    REFERENCES provincias(id_provincia),
+
+FOREIGN KEY (id_tramo_confluencia)
+    REFERENCES tramos(id_tramo),
+
+FOREIGN KEY (id_provincia_confluencia)
+    REFERENCES provincias(id_provincia),
+
+UNIQUE (codigo_carretera, posicion)
+);
+
+--  Table TRAYECTOS
+CREATE TABLE trayectos (
+id_tramo INT NOT NULL,
+id_paso INT NOT NULL,
+id_provincia INT NOT NULL,
+ km_inicio DECIMAL(8,3) NOT NULL,
+ km_fin DECIMAL(8,3) NOT NULL,
+
+PRIMARY KEY (id_tramo, id_paso),
+
+FOREIGN KEY (id_tramo)
+    REFERENCES tramos(id_tramo),
+
+FOREIGN KEY (id_provincia)
+    REFERENCES provincias(id_provincia)
+);</script>
+    <script>
+      const source = document.getElementById('sql-source').textContent;
+      const display = document.getElementById('sql-display');
+      const status = document.getElementById('sql-status');
+      const keywords = new Set([
+        'BOOLEAN', 'CHECK', 'ENUM', 'IN', 'TINYINT', 'UNIQUE', 'UNSIGNED', 'AUTO_INCREMENT', 'CHAR', 'CREATE', 'DATABASE', 'DATE', 'DECIMAL',
+        'FOREIGN', 'IF', 'INT', 'KEY', 'NOT', 'NULL', 'REFERENCES',
+        'PRIMARY', 'TABLE', 'USE', 'VARCHAR'
+      ]);
+      const tokenPattern = /(\/\*[\s\S]*?\*\/|--[^\n]*|'(?:''|[^'])*'|"(?:\"\"|[^"])*"|`[^`]*`|\b[A-Z_]+\b|\b\d+(?:\.\d+)?\b)/gi;
+      let rendered = '';
+      let cursor = 0;
+      for (const match of source.matchAll(tokenPattern)) {
+        rendered += escapeHtml(source.slice(cursor, match.index));
+        const token = match[0];
+        let tokenClass = '';
+        if (token.startsWith('--') || token.startsWith('/*')) {
+          tokenClass = 'text-slate-500';
+        } else if (token.startsWith("'") || token.startsWith('"') || token.startsWith('`')) {
+          tokenClass = 'text-emerald-300';
+        } else if (keywords.has(token.toUpperCase())) {
+          tokenClass = 'text-cyan-300';
+        } else if (/^\d/.test(token)) {
+          tokenClass = 'text-amber-300';
+        }
+        rendered += tokenClass ? '<span class="' + tokenClass + '">' + escapeHtml(token) + '</span>' : escapeHtml(token);
+        cursor = match.index + token.length;
+      }
+      display.innerHTML = rendered + escapeHtml(source.slice(cursor));
+
+      document.getElementById('copy-sql').addEventListener('click', async () => {
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(source);
+          } else {
+            const textarea = document.createElement('textarea');
+            textarea.value = source;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            let copied;
+            try {
+              textarea.select();
+              copied = document.execCommand('copy');
+            } finally {
+              textarea.remove();
+            }
+            if (!copied) throw new Error('El navegador no permitió copiar el SQL.');
+          }
+          status.textContent = 'SQL copiado al portapapeles.';
+        } catch (error) {
+          status.textContent = 'No se pudo copiar automáticamente. Selecciona y copia el código manualmente.';
+          console.error(error);
+        }
+      });
+
+      document.getElementById('download-sql').addEventListener('click', () => {
+        try {
+          const blob = new Blob([source], { type: 'text/sql;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'carreteras-1.sql';
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+          status.textContent = 'Descarga de carreteras-1.sql iniciada.';
+        } catch (error) {
+          status.textContent = 'No se pudo descargar el archivo SQL.';
+          console.error(error);
+        }
+      });
+
+      function escapeHtml(value) {
+        return value.replace(/[&<>"']/g, (character) => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        })[character]);
+      }
+    </script>
+  </body>
+</html>

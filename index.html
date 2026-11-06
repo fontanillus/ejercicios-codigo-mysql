@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Ejercicios de la UF03 de Bases de Datos MySQL: Lenguaje de Definición de Datos (DDL).">
+    <meta name="theme-color" content="#0f172a">
+    <title>UF03 · Lenguaje de Definición de Datos (DDL) | SOC MySQL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+    <header class="bg-slate-900 text-white">
+      <div class="mx-auto max-w-6xl px-5 py-5 sm:px-8">
+        <nav class="flex items-center justify-between gap-4" aria-label="Navegación principal">
+          <span class="text-sm font-semibold tracking-wide text-slate-200">SOC · Bases de Datos MySQL</span>
+        </nav>
+        <div class="py-16 sm:py-20">
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">Unidad formativa · UF03</p>
+          <h1 class="max-w-3xl text-3xl font-bold tracking-tight sm:text-5xl">Lenguaje de Definición de Datos <span class="text-cyan-300">(DDL)</span></h1>
+          <p class="mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
+            Aprende a definir y mantener estructuras de bases de datos MySQL con las instrucciones CREATE, ALTER, DROP y TRUNCATE.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
+      <section aria-labelledby="exercises-heading">
+        <div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="text-sm font-semibold uppercase tracking-wider text-cyan-700">Aprende practicando</p>
+            <h2 id="exercises-heading" class="mt-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Ejercicios</h2>
+          </div>
+          <p class="max-w-xl text-sm leading-6 text-slate-600">Colección de ejercicios prácticos de MySQL para aprender a diseñar bases de datos relacionales, definir claves, establecer restricciones y trabajar con código SQL</p>
+        </div>
+
+        <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <article class="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+            <div class="mb-5 flex items-center justify-between gap-3">
+              <span class="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-800">Ejercicio 01</span>
+              <span class="rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">Completado</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900">Base de datos VENTAS</h3>
+            <p class="mt-3 flex-1 text-sm leading-6 text-slate-600">Diseño de una base de datos para gestionar ventas comerciales, organizando clientes, proveedores, productos, categorías, facturas y líneas de factura mediante tablas relacionadas, claves primarias y foráneas.</p>
+            <a class="mt-6 inline-flex items-center gap-2 font-semibold text-cyan-800 hover:text-cyan-950" href="./ejercicio-01/ventas.html">
+              Ver ejercicio <span aria-hidden="true">→</span>
+            </a>
+          </article>
+          <article class="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+            <div class="mb-5 flex items-center justify-between gap-3">
+              <span class="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-800">Ejercicio 02</span>
+              <span class="rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">Completado</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900">Base de datos CARRETERAS</h3>
+            <p class="mt-3 flex-1 text-sm leading-6 text-slate-600">Diseño de una base de datos para gestionar carreteras, sus tramos, categorías, comunidades autónomas, provincias, extremos y trayectos, utilizando claves compuestas y restricciones de integridad.</p>
+            <a class="mt-6 inline-flex items-center gap-2 font-semibold text-cyan-800 hover:text-cyan-950" href="./ejercicio-02/carreteras.html">Ver ejercicio <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+            <div class="mb-5 flex items-center justify-between gap-3">
+              <span class="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-800">Ejercicio 4</span>
+              <span class="rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">Completado</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900">Sistema de vuelos</h3>
+            <p class="mt-3 flex-1 text-sm leading-6 text-slate-600">Diseño e implementación de una base de datos relacional MySQL para gestionar aeropuertos, modelos de aviones, líneas aéreas, programas de vuelo, vuelos realizados y escalas técnicas.</p>
+            <a class="mt-6 inline-flex items-center gap-2 font-semibold text-cyan-800 hover:text-cyan-950" href="./ejercicio-03/vuelos.html">Ver ejercicio <span aria-hidden="true">→</span></a>
+          </article>
+        </div>
+      </section>
+
+      <section class="mt-12 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8" aria-labelledby="ddl-heading">
+        <h2 id="ddl-heading" class="text-lg font-bold text-slate-900">¿Qué es DDL?</h2>
+        <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
+          El Lenguaje de Definición de Datos permite crear y modificar objetos de una base de datos. En esta unidad se trabajan CREATE para crear estructuras, ALTER para modificarlas, DROP para eliminarlas y TRUNCATE para vaciar una tabla.
+        </p>
+      </section>
+    </main>
+
+    <footer class="border-t border-slate-200 bg-white">
+      <div class="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+        <p>SOC · Bases de Datos MySQL</p>
+        <p>UF03 · Lenguaje de Definición de Datos</p>
+      </div>
+    </footer>
+  </body>
+</html>

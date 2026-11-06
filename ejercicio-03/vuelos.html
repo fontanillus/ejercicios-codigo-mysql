@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Ejercicio 4 de la UF03: diseño de la base de datos VUELOS con DDL de MySQL.">
+    <meta name="theme-color" content="#0f172a">
+    <title>Ejercicio 4 · Sistema de vuelos | UF03 MySQL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+    <header class="bg-slate-900 text-white">
+      <div class="mx-auto max-w-6xl px-5 py-5 sm:px-8">
+        <nav class="flex flex-wrap items-center justify-between gap-4" aria-label="Navegación principal">
+          <span class="text-sm font-semibold tracking-wide text-slate-200">UF03 · DDL</span>
+        </nav>
+        <div class="py-12 sm:py-16">
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">Ejercicio 4</p>
+          <h1 class="text-3xl font-bold tracking-tight sm:text-5xl">Sistema de <span class="text-cyan-300">vuelos</span></h1>
+          <p class="mt-5 max-w-2xl text-base leading-7 text-slate-300">Diseño e implementación de una base de datos relacional MySQL para gestionar aeropuertos, modelos de aviones, líneas aéreas, programas de vuelo, vuelos realizados y escalas técnicas.</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-14">
+      <nav class="mb-8 text-sm text-slate-500" aria-label="Ruta de navegación">
+        <ol class="flex flex-wrap items-center gap-2">
+          <li><a class="hover:text-slate-800" href="../index.html">UF03 · DDL</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page" class="text-slate-700">Ejercicio 4 · VUELOS</li>
+        </ol>
+      </nav>
+
+      <div class="grid gap-8">
+        <div class="space-y-8">
+          <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8" aria-labelledby="objective-heading">
+            <details class="group">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-3 text-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2 [&::-webkit-details-marker]:hidden">
+                <span id="objective-heading">Objetivo del ejercicio</span>
+                <span class="text-base transition-transform group-open:rotate-180" aria-hidden="true">⌄</span>
+              </summary>
+              <div class="mt-5 space-y-4 text-sm leading-6 text-slate-600"><p>Diseño e implementación de una base de datos relacional MySQL para gestionar aeropuertos, modelos de aviones, líneas aéreas, programas de vuelo, vuelos realizados y escalas técnicas.</p><p>Modelo trabajado en clase con Rita y adaptado a MySQL 8.4. La documentación describe el archivo original <code>vuelos.sql</code>.</p></div>
+            </details>
+          </section>          <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8" aria-labelledby="tables-heading">
+            <details class="group">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-3 text-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2 [&::-webkit-details-marker]:hidden">
+                <span id="tables-heading">Las diez tablas del ejercicio</span>
+                <span class="text-base transition-transform group-open:rotate-180" aria-hidden="true">⌄</span>
+              </summary>
+              <div class="mt-5 space-y-4 text-sm leading-6 text-slate-600"><div class="grid gap-4 sm:grid-cols-2"><article class="min-w-0 rounded-xl bg-slate-50 p-4"><h3 class="break-words font-mono text-sm font-bold text-slate-900">paises</h3><p class="mt-2 break-words">Países identificados por la PK <code>codigo_pais</code>; <code>pais</code> es obligatorio.</p></article>
+<article class="min-w-0 rounded-xl bg-slate-50 p-4"><h3 class="break-words font-mono text-sm font-bold text-slate-900">ciudades</h3><p class="mt-2 break-words">PK autoincremental <code>id_ciudades</code>, nombre obligatorio y FK <code>fk_pais</code> a <code>paises(codigo_pais)</code>.</p></article>
+<article class="min-w-0 rounded-xl bg-slate-50 p-4"><h3 class="break-words font-mono text-sm font-bold text-slate-900">aeropuertos</h3><p class="mt-2 break-words">PK <code>codigo_aeropuerto</code>, nombre obligatorio y FK <code>fk_ciudad</code> a <code>ciudades(id_ciudades)</code>.</p></article>
+<article class="min-w-0 rounded-xl bg-slate-50 p-4"><h3 class="break-words font-mono text-sm font-bold text-slate-900">modelos_aviones</h3><p class="mt-2 break-words">PK autoincremental <code>id_modelo</code>. Nombre de modelo obligatorio y único; capacidad obligatoria y positiva.</p></article>
+<article class="min-w-0 rounded-xl bg-slate-50 p-4"><h3 class="break-words font-mono text-sm font-bold text-slate-900">lineas_aereas</h3><p class="mt-2 break-words">PK <code>id_linea_aerea</code> y nombre obligatorio <code>nombre_linea_aerea</code>.</p></article>
+<article class="min-w-0 rounded-xl bg-slate-50 p-4"><h3 class="break-words font-mono text-sm font-bold text-slate-900">aeropuertos_modelos_aviones</h3><p class="mt-2 break-words">Compatibilidad entre aeropuertos y modelos. PK compuesta <code>(fk_aeropuerto, fk_modelo)</code>; ambos campos son FK a sus tablas respectivas.</p></article>
+<article class="min-w-0 rounded-xl bg-slate-50 p-4"><h3 class="break-words font-mono text-sm font-bold text-slate-900">programas_vuelos</h3><p class="mt-2 break-words">PK autoincremental <code>id_programa_vuelo</code>. Número de vuelo único; FK <code>linea_aerea</code> a la línea aérea y FK <code>aeropuerto_partida</code> y <code>aeropuerto_llegada</code> a aeropuertos distintos.</p></article>
+<article class="min-w-0 rounded-xl bg-slate-50 p-4"><h3 class="break-words font-mono text-sm font-bold text-slate-900">schedule_programas_vuelos</h3><p class="mt-2 break-words">Días y horas de salida. PK compuesta <code>(fk_programa_vuelo, dia_semana, hora_salida)</code>. FK al programa; día entre 1 y 7.</p></article>
+<article class="min-w-0 rounded-xl bg-slate-50 p-4"><h3 class="break-words font-mono text-sm font-bold text-slate-900">vuelos</h3><p class="mt-2 break-words">Vuelos realizados. PK autoincremental <code>pk_vuelo</code>; fecha, hora y plazas vacías obligatorias. FK <code>fk_programa_vuelo</code> y <code>fk_modelo</code>. Programa y fecha forman una combinación única; plazas vacías no negativas.</p></article>
+<article class="min-w-0 rounded-xl bg-slate-50 p-4"><h3 class="break-words font-mono text-sm font-bold text-slate-900">escalas_tecnicas</h3><p class="mt-2 break-words">PK compuesta <code>(fk_vuelo, numero_escala)</code>. FK al vuelo realizado y a los aeropuertos de partida y llegada. Número de escala positivo y aeropuertos distintos.</p></article></div></div>
+            </details>
+          </section>          <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8" aria-labelledby="keys-heading">
+            <details class="group">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-3 text-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2 [&::-webkit-details-marker]:hidden">
+                <span id="keys-heading">Claves, relaciones y restricciones implementadas</span>
+                <span class="text-base transition-transform group-open:rotate-180" aria-hidden="true">⌄</span>
+              </summary>
+              <div class="mt-5 space-y-4 text-sm leading-6 text-slate-600"><p><code>PRIMARY KEY</code> identifica cada fila; las claves compuestas identifican combinaciones únicas. <code>FOREIGN KEY</code> exige que cada referencia exista en la tabla correspondiente. Todas las columnas del modelo son obligatorias: tienen <code>NOT NULL</code> explícito o son parte de una PK.</p>
+<h3 class="font-semibold text-slate-900">Relaciones 1:N y N:M</h3>
+<ul class="list-disc space-y-2 pl-5">
+<li>País 1:N ciudades; ciudad 1:N aeropuertos.</li>
+<li>Línea aérea 1:N programas de vuelo. Aeropuerto 1:N programas como origen y, por separado, como destino.</li>
+<li>Programa 1:N horarios y programa 1:N vuelos realizados. Modelo de avión 1:N vuelos realizados.</li>
+<li>Vuelo realizado 1:N escalas técnicas. Aeropuerto 1:N escalas como partida y como llegada.</li>
+<li>Aeropuertos N:M modelos de aviones mediante <code>aeropuertos_modelos_aviones</code>, con dos FK y una PK compuesta.</li>
+</ul>
+<p>En estas relaciones, cada fila hija referencia exactamente una fila padre por cada FK. Un padre puede tener cero o muchas filas hijas: las FK no exigen un mínimo de registros hijos.</p>
+<h3 class="font-semibold text-slate-900">UNIQUE</h3>
+<p>Son únicos <code>modelos_aviones.modelo</code>, <code>programas_vuelos.numero_vuelo</code> y la combinación <code>vuelos(fk_programa_vuelo, fecha)</code>. Esta última impide repetir un programa en la misma fecha, aunque cambie la hora.</p>
+<h3 class="font-semibold text-slate-900">CHECK</h3>
+<ul class="list-disc space-y-2 pl-5">
+<li><code>capacidad &gt; 0</code> en modelos y <code>plazas_vacias &gt;= 0</code> en vuelos.</li>
+<li><code>dia_semana BETWEEN 1 AND 7</code> en los horarios.</li>
+<li><code>numero_escala &gt; 0</code> en escalas técnicas.</li>
+<li><code>aeropuerto_partida &lt;&gt; aeropuerto_llegada</code> tanto en programas como en escalas.</li>
+</ul></div>
+            </details>
+          </section>          <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8" aria-labelledby="pending-heading">
+            <details class="group">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-3 text-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2 [&::-webkit-details-marker]:hidden">
+                <span id="pending-heading">Restricciones pendientes</span>
+                <span class="text-base transition-transform group-open:rotate-180" aria-hidden="true">⌄</span>
+              </summary>
+              <div class="mt-5 space-y-4 text-sm leading-6 text-slate-600"><p>Las siguientes reglas figuran en los comentarios del SQL, pero no están implementadas como restricciones:</p>
+<ul class="list-disc space-y-2 pl-5">
+<li>Las plazas vacías no deben superar la capacidad del modelo.</li>
+<li>Cada programa debe operar al menos un día.</li>
+<li>Cada aeropuerto debe tener salidas y llegadas.</li>
+<li>El modelo utilizado debe estar admitido en los aeropuertos correspondientes. La tabla de compatibilidad existe, pero no se comprueba esa compatibilidad al registrar los vuelos.</li>
+<li>La secuencia de escalas debe mantener la continuidad entre aeropuertos.</li>
+</ul>
+<p>Estas reglas requieren validaciones adicionales; no se atribuyen al SQL original.</p></div>
+            </details>
+          </section>          <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8" aria-labelledby="stops-heading">
+            <details class="group">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-3 text-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2 [&::-webkit-details-marker]:hidden">
+                <span id="stops-heading">Escalas técnicas</span>
+                <span class="text-base transition-transform group-open:rotate-180" aria-hidden="true">⌄</span>
+              </summary>
+              <div class="mt-5 space-y-4 text-sm leading-6 text-slate-600"><p>Son paradas intermedias en las que el avión aterriza y despega sin intercambio de pasajeros. Cada registro pertenece a un vuelo realizado e identifica aeropuertos de partida y llegada.</p>
+<p>La PK <code>(fk_vuelo, numero_escala)</code> identifica las escalas y permite ordenarlas dentro del vuelo. El número debe ser positivo, pero no se exige numeración consecutiva ni continuidad entre escalas. La ausencia de intercambio de pasajeros es el significado del modelo; no hay campos de embarque o desembarque.</p></div>
+            </details>
+          </section>          <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8" aria-labelledby="commercial-heading">
+            <details class="group">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-3 text-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2 [&::-webkit-details-marker]:hidden">
+                <span id="commercial-heading">Ampliación conceptual: escalas comerciales</span>
+                <span class="text-base transition-transform group-open:rotate-180" aria-hidden="true">⌄</span>
+              </summary>
+              <div class="mt-5 space-y-4 text-sm leading-6 text-slate-600"><p><strong>Propuesta no implementada.</strong> Si se permite subir o bajar pasajeros, las escalas dejan de ser exclusivamente técnicas. Los comentarios del archivo proponen ampliar la tabla con <code>tipo_escala</code> (TECNICA o COMERCIAL), <code>pasajeros_suben</code> y <code>pasajeros_bajan</code>.</p>
+<p>Se exigirían cantidades no negativas y valores cero para ambos contadores en una escala técnica. En una comercial se permitiría embarcar y desembarcar. La ocupación se actualizaría restando quienes bajan y sumando quienes suben; habría que validar su coherencia y que no supere la capacidad del modelo durante el recorrido.</p>
+<p>Estos atributos y validaciones no forman parte de las diez tablas implementadas. La ampliación se explica sin modificar el SQL.</p></div>
+            </details>
+          </section>
+
+          <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8" aria-labelledby="sql-heading">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 id="sql-heading" class="text-xl font-bold text-slate-900">Código SQL</h2>
+                <p class="mt-1 text-sm text-slate-600">Contenido literal del archivo original <code class="rounded bg-slate-100 px-1 py-0.5">vuelos.sql</code>.</p>
+              </div>
+              <div class="flex flex-wrap gap-3">
+                <button id="copy-sql" class="rounded-lg bg-cyan-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-cyan-950 focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2" type="button" aria-describedby="sql-status">Copiar SQL</button>
+                <button id="download-sql" class="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50" type="button">Descargar SQL <span aria-hidden="true">↓</span></button>
+              </div>
+            </div>
+            <details class="group mt-5">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-3 rounded-lg border border-slate-200 px-4 py-3 text-sm font-semibold text-cyan-900 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-600 [&::-webkit-details-marker]:hidden">
+                <span>Mostrar código SQL</span>
+                <span class="transition-transform group-open:rotate-180" aria-hidden="true">⌄</span>
+              </summary>
+              <pre class="mt-3 overflow-x-auto rounded-xl bg-slate-950 p-5 text-sm leading-6 text-slate-200" aria-label="Código SQL de la base de datos VUELOS"><code id="sql-display"></code></pre>
+            </details>
+            <p id="sql-status" class="mt-3 min-h-5 text-xs text-slate-500" role="status" aria-live="polite">SQL original listo para copiar o descargar.</p>
+          </section>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="border-t border-slate-200 bg-white">
+      <div class="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+        <a class="hover:text-slate-800" href="../">UF03 · Lenguaje de Definición de Datos</a>
+        <p>Ejercicio 4 · Sistema de vuelos</p>
+      </div>
+    </footer>
+    <script type="text/plain" id="sql-source">/*
+EJERCICIO 4: SISTEMA DE VUELOS
+Curso SOC - Bases de datos MySQL 8.4
+
+OBJETIVO:
+Gestionar aeropuertos, ciudades, países,
+líneas aéreas, modelos de aviones,
+programas de vuelo, vuelos realizados
+y escalas técnicas.
+
+MODELO RELACIONAL IMPLEMENTADO:
+
+1. PAISES
+2. CIUDADES
+3. AEROPUERTOS
+4. MODELOS_AVIONES
+5. LINEAS_AEREAS
+6. AEROPUERTOS_MODELOS_AVIONES
+7. PROGRAMAS_VUELOS
+8. SCHEDULE_PROGRAMAS_VUELOS
+9. VUELOS
+10. ESCALAS_TECNICAS
+
+RESTRICCIONES IMPLEMENTADAS:
+- Claves primarias y foráneas.
+- Número de vuelo único.
+- Capacidad de avión positiva.
+- Plazas vacías no negativas.
+- Origen y destino distintos.
+- Día de la semana entre 1 y 7.
+- Número de escala positivo.
+- Un programa no se repite en la misma
+  fecha de vuelo.
+
+RESTRICCIONES PENDIENTES:
+- Plazas vacías <= capacidad del modelo.
+- Un programa debe operar al menos un día.
+- Cada aeropuerto debe tener salidas y llegadas.
+- Verificar modelos admitidos en aeropuertos.
+- Validar continuidad entre escalas.
+
+AMPLIACIÓN PENDIENTE:
+Escalas comerciales con pasajeros
+que suben y bajan.
+
+NOTA:
+Modelo basado en la implementación de Rita.
+*/
+
+CREATE DATABASE IF NOT EXISTS vuelos;
+USE vuelos;
+
+-- ==========================================
+-- 1. TABLA PAISES
+-- ==========================================
+
+CREATE TABLE paises (
+    codigo_pais CHAR(2) PRIMARY KEY,
+    pais VARCHAR(50) NOT NULL
+);
+
+-- ==========================================
+-- 2. TABLA CIUDADES
+-- ==========================================
+
+CREATE TABLE ciudades (
+    id_ciudades INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    fk_pais CHAR(2) NOT NULL,
+
+    FOREIGN KEY (fk_pais)
+        REFERENCES paises(codigo_pais)
+);
+
+-- ==========================================
+-- 3. TABLA AEROPUERTOS
+-- ==========================================
+
+CREATE TABLE aeropuertos (
+    codigo_aeropuerto CHAR(3) PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    fk_ciudad INT NOT NULL,
+
+    FOREIGN KEY (fk_ciudad)
+        REFERENCES ciudades(id_ciudades)
+);
+
+-- ==========================================
+-- 4. TABLA MODELOS_AVIONES
+-- ==========================================
+
+CREATE TABLE modelos_aviones (
+    id_modelo INT AUTO_INCREMENT PRIMARY KEY,
+    modelo VARCHAR(50) NOT NULL UNIQUE,
+    capacidad INT NOT NULL,
+
+    CHECK (capacidad > 0)
+);
+
+-- ==========================================
+-- 5. TABLA LINEAS_AEREAS
+-- ==========================================
+
+CREATE TABLE lineas_aereas (
+    id_linea_aerea CHAR(3) PRIMARY KEY,
+    nombre_linea_aerea VARCHAR(50) NOT NULL
+);
+
+-- ==========================================
+-- 6. TABLA AEROPUERTOS_MODELOS_AVIONES
+-- ==========================================
+
+CREATE TABLE aeropuertos_modelos_aviones (
+    fk_aeropuerto CHAR(3) NOT NULL,
+    fk_modelo INT NOT NULL,
+
+    PRIMARY KEY (fk_aeropuerto, fk_modelo),
+
+    FOREIGN KEY (fk_aeropuerto)
+        REFERENCES aeropuertos(codigo_aeropuerto),
+
+    FOREIGN KEY (fk_modelo)
+        REFERENCES modelos_aviones(id_modelo)
+);
+
+-- ==========================================
+-- 7. TABLA PROGRAMAS_VUELOS
+-- ==========================================
+
+CREATE TABLE programas_vuelos (
+    id_programa_vuelo INT AUTO_INCREMENT PRIMARY KEY,
+    numero_vuelo VARCHAR(20) NOT NULL UNIQUE,
+    linea_aerea CHAR(3) NOT NULL,
+    aeropuerto_partida CHAR(3) NOT NULL,
+    aeropuerto_llegada CHAR(3) NOT NULL,
+
+    CHECK (aeropuerto_partida <> aeropuerto_llegada),
+
+    FOREIGN KEY (aeropuerto_partida)
+        REFERENCES aeropuertos(codigo_aeropuerto),
+
+    FOREIGN KEY (aeropuerto_llegada)
+        REFERENCES aeropuertos(codigo_aeropuerto),
+
+    FOREIGN KEY (linea_aerea)
+        REFERENCES lineas_aereas(id_linea_aerea)
+);
+
+-- ==========================================
+-- 8. TABLA SCHEDULE_PROGRAMAS_VUELOS
+-- ==========================================
+
+CREATE TABLE schedule_programas_vuelos (
+    fk_programa_vuelo INT NOT NULL,
+    dia_semana TINYINT NOT NULL,
+    hora_salida TIME NOT NULL,
+
+    PRIMARY KEY (
+        fk_programa_vuelo,
+        dia_semana,
+        hora_salida
+    ),
+
+    CHECK (dia_semana BETWEEN 1 AND 7),
+
+    FOREIGN KEY (fk_programa_vuelo)
+        REFERENCES programas_vuelos(id_programa_vuelo)
+);
+
+-- ==========================================
+-- 9. TABLA VUELOS
+-- ==========================================
+
+CREATE TABLE vuelos (
+    pk_vuelo INT AUTO_INCREMENT PRIMARY KEY,
+    fk_programa_vuelo INT NOT NULL,
+    fecha DATE NOT NULL,
+    hora TIME NOT NULL,
+    plazas_vacias INT NOT NULL,
+    fk_modelo INT NOT NULL,
+
+    UNIQUE (fk_programa_vuelo, fecha),
+
+    CHECK (plazas_vacias >= 0),
+
+    FOREIGN KEY (fk_programa_vuelo)
+        REFERENCES programas_vuelos(id_programa_vuelo),
+
+    FOREIGN KEY (fk_modelo)
+        REFERENCES modelos_aviones(id_modelo)
+);
+
+-- ==========================================
+-- 10. TABLA ESCALAS_TECNICAS
+-- ==========================================
+
+CREATE TABLE escalas_tecnicas (
+    fk_vuelo INT NOT NULL,
+    numero_escala INT NOT NULL,
+    aeropuerto_partida CHAR(3) NOT NULL,
+    aeropuerto_llegada CHAR(3) NOT NULL,
+
+    PRIMARY KEY (fk_vuelo, numero_escala),
+
+    CHECK (numero_escala > 0),
+    CHECK (aeropuerto_partida <> aeropuerto_llegada),
+
+    FOREIGN KEY (fk_vuelo)
+        REFERENCES vuelos(pk_vuelo),
+
+    FOREIGN KEY (aeropuerto_partida)
+        REFERENCES aeropuertos(codigo_aeropuerto),
+
+    FOREIGN KEY (aeropuerto_llegada)
+        REFERENCES aeropuertos(codigo_aeropuerto)
+);
+
+
+/*
+====================================================
+EJERCICIO 4 - SISTEMA DE VUELOS
+DOCUMENTACIÓN Y JUSTIFICACIÓN DEL MODELO
+====================================================
+
+1. DISEÑO RELACIONAL
+
+Se ha implementado una base de datos de 10 tablas,
+siguiendo el modelo trabajado por la docente en Access
+y adaptándolo a MySQL 8.4.
+
+El diseño contempla:
+- Aeropuertos, ciudades y países.
+- Modelos de aviones y sus capacidades.
+- Compatibilidad entre aeropuertos y modelos.
+- Líneas aéreas y programas de vuelo.
+- Días y horarios de operación.
+- Vuelos realizados.
+- Escalas técnicas ordenadas.
+
+2. RELACIONES E INTEGRIDAD
+
+Se utilizan claves primarias (PK) y foráneas (FK)
+para establecer las relaciones entre tablas.
+
+Las relaciones N:M se resuelven mediante tablas
+intermedias con claves primarias compuestas.
+
+Se aplican restricciones NOT NULL, UNIQUE y CHECK
+para proteger la integridad de los datos.
+
+3. ESCALAS TÉCNICAS
+
+Las escalas técnicas representan paradas
+intermedias en las que el avión aterriza
+y despega sin intercambio de pasajeros.
+
+Cada escala pertenece a un vuelo realizado.
+
+La clave primaria compuesta
+(fk_vuelo, numero_escala)
+permite identificar y ordenar las escalas
+correspondientes a cada vuelo.
+
+4. AMPLIACIÓN: ESCALAS COMERCIALES
+
+Si se permitiera subir o bajar pasajeros,
+las escalas dejarían de ser exclusivamente
+técnicas.
+
+Se propone ampliar la tabla de escalas
+incorporando los siguientes atributos:
+
+- tipo_escala:
+  'TECNICA' o 'COMERCIAL'.
+
+- pasajeros_suben:
+  Número de pasajeros que embarcan.
+
+- pasajeros_bajan:
+  Número de pasajeros que desembarcan.
+
+Se aplicarían las siguientes restricciones:
+
+- Los pasajeros que suben o bajan
+  no pueden ser negativos.
+
+- En una escala técnica, ambos valores
+  deben ser cero.
+
+- En una escala comercial, se permite
+  el embarque y desembarque de pasajeros.
+
+- La ocupación resultante no puede superar
+  la capacidad del modelo de avión.
+
+5. ALCANCE DE LA IMPLEMENTACIÓN
+
+El modelo implementa la estructura principal
+del sistema de vuelos.
+
+Algunas reglas de negocio, como garantizar
+que todos los aeropuertos tengan salidas
+y llegadas o comprobar la capacidad disponible
+entre tablas, requerirían validaciones
+adicionales.
+
+La ampliación de escalas comerciales se
+documenta conceptualmente, sin modificar
+las tablas implementadas.
+
+====================================================
+FIN DEL EJERCICIO 4
+====================================================
+*/
+
+
+</script>
+    <script>
+      const source = document.getElementById('sql-source').textContent;
+      const display = document.getElementById('sql-display');
+      const status = document.getElementById('sql-status');
+      const keywords = new Set([
+        'BETWEEN', 'TIME', 'CONSTRAINT', 'BOOLEAN', 'CHECK', 'ENUM', 'IN', 'TINYINT', 'UNIQUE', 'UNSIGNED', 'AUTO_INCREMENT', 'CHAR', 'CREATE', 'DATABASE', 'DATE', 'DECIMAL',
+        'FOREIGN', 'IF', 'INT', 'KEY', 'NOT', 'NULL', 'REFERENCES',
+        'PRIMARY', 'TABLE', 'USE', 'VARCHAR'
+      ]);
+      const tokenPattern = /(\/\*[\s\S]*?\*\/|--[^\n]*|'(?:''|[^'])*'|"(?:\"\"|[^"])*"|`[^`]*`|\b[A-Z_]+\b|\b\d+(?:\.\d+)?\b)/gi;
+      let rendered = '';
+      let cursor = 0;
+      for (const match of source.matchAll(tokenPattern)) {
+        rendered += escapeHtml(source.slice(cursor, match.index));
+        const token = match[0];
+        let tokenClass = '';
+        if (token.startsWith('--') || token.startsWith('/*')) {
+          tokenClass = 'text-slate-500';
+        } else if (token.startsWith("'") || token.startsWith('"') || token.startsWith('`')) {
+          tokenClass = 'text-emerald-300';
+        } else if (keywords.has(token.toUpperCase())) {
+          tokenClass = 'text-cyan-300';
+        } else if (/^\d/.test(token)) {
+          tokenClass = 'text-amber-300';
+        }
+        rendered += tokenClass ? '<span class="' + tokenClass + '">' + escapeHtml(token) + '</span>' : escapeHtml(token);
+        cursor = match.index + token.length;
+      }
+      display.innerHTML = rendered + escapeHtml(source.slice(cursor));
+
+      document.getElementById('copy-sql').addEventListener('click', async () => {
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(source);
+          } else {
+            const textarea = document.createElement('textarea');
+            textarea.value = source;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            let copied;
+            try {
+              textarea.select();
+              copied = document.execCommand('copy');
+            } finally {
+              textarea.remove();
+            }
+            if (!copied) throw new Error('El navegador no permitió copiar el SQL.');
+          }
+          status.textContent = 'SQL copiado al portapapeles.';
+        } catch (error) {
+          status.textContent = 'No se pudo copiar automáticamente. Selecciona y copia el código manualmente.';
+          console.error(error);
+        }
+      });
+
+      document.getElementById('download-sql').addEventListener('click', () => {
+        try {
+          const blob = new Blob([source], { type: 'text/sql;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'vuelos.sql';
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+          status.textContent = 'Descarga de vuelos.sql iniciada.';
+        } catch (error) {
+          status.textContent = 'No se pudo descargar el archivo SQL.';
+          console.error(error);
+        }
+      });
+
+      function escapeHtml(value) {
+        return value.replace(/[&<>"']/g, (character) => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        })[character]);
+      }
+    </script>
+  </body>
+</html>
